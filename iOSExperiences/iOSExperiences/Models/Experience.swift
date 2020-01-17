@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import CoreLocation
 
 enum MediaType: String {
     case image
@@ -20,10 +21,10 @@ class Experience {
     var mediaURL: URL
     var mediaType: MediaType
     var audioURL: URL?
-    var geotag: CLLocationCoordinate2D?
+    var geotag: MKAnnotation?
 
     
-    init(memory: String, mediaURL: URL, mediaType: MediaType, audioURL: URL? = nil, geotag: CLLocationCoordinate2D?) {
+    init(memory: String, mediaURL: URL, mediaType: MediaType, audioURL: URL? = nil, geotag: MKAnnotation?) {
         self.memory = memory
         self.mediaType = mediaType
         self.mediaURL = mediaURL

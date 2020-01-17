@@ -18,6 +18,7 @@
 		4B438CF123D22EC200677406 /* ExperienceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B438CF023D22EC200677406 /* ExperienceViewController.swift */; };
 		4B438CF323D22ECE00677406 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B438CF223D22ECE00677406 /* CameraViewController.swift */; };
 		4B438CF623D2362200677406 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B438CF523D2362200677406 /* CameraPreviewView.swift */; };
+		4B438CF823D250F900677406 /* ExperienceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B438CF723D250F900677406 /* ExperienceAnnotation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		4B438CF023D22EC200677406 /* ExperienceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceViewController.swift; sourceTree = "<group>"; };
 		4B438CF223D22ECE00677406 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		4B438CF523D2362200677406 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		4B438CF723D250F900677406 /* ExperienceAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceAnnotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				4B438CEC23D22CAD00677406 /* Experience.swift */,
+				4B438CF723D250F900677406 /* ExperienceAnnotation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 				4B438CDC23D223AD00677406 /* iOSExperiences.xcdatamodeld in Sources */,
 				4B438CD223D223AD00677406 /* AppDelegate.swift in Sources */,
 				4B438CD423D223AD00677406 /* SceneDelegate.swift in Sources */,
+				4B438CF823D250F900677406 /* ExperienceAnnotation.swift in Sources */,
 				4B438CF323D22ECE00677406 /* CameraViewController.swift in Sources */,
 				4B438CEF23D22EB500677406 /* MapViewController.swift in Sources */,
 				4B438CED23D22CAD00677406 /* Experience.swift in Sources */,
@@ -336,14 +340,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TWS9D8949P;
 				INFOPLIST_FILE = iOSExperiences/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = NarKumar.iOSExperiences;
+				PRODUCT_BUNDLE_IDENTIFIER = NarKumar.iOSExperiences.Lambda;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -353,14 +360,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TWS9D8949P;
 				INFOPLIST_FILE = iOSExperiences/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = NarKumar.iOSExperiences;
+				PRODUCT_BUNDLE_IDENTIFIER = NarKumar.iOSExperiences.Lambda;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

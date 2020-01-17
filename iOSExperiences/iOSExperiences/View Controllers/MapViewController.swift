@@ -10,11 +10,13 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, MKMapViewDelegate {
     
     // MARK: - Outlets
     
     @IBOutlet weak var mapView: MKMapView!
+    var experience: Experience?
+    
     let annotationReuseIdentifier = "PostAnnotation"
 
     let location = CLLocationManager()
@@ -30,11 +32,26 @@ class MapViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        guard let experience = experience else { return }
         mapView.removeAnnotations(mapView.annotations)
         
-        let annotations = pos
+        let annotations = experience.geotag
         
-        mapView.addAnnotations(annotations)
+//        mapView.addAnnotation(annotations)
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        if annotation is MKUserLocation {
+            return nil
+        }
+        
+        guard let av = mapView.dequeueReusableAnnotationView(withIdentifier: annotationReuseIdentifier, for: annotation) as? MKMarkerAnnotationView else { return nil }
+        
+        av.titleVisibility = .adaptive
+        av.subtitleVisibility = .adaptive
+        
+        return av
     }
     
     @IBAction func createExperience(_ sender: Any) {
@@ -85,10 +102,4 @@ class MapViewController: UIViewController {
 extension MapViewController: CLLocationManagerDelegate {
 
 }
-extension MapViewController: MKMapViewDelegate {
-    
-//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-//
-//    return MKAnnotationView
-//    }
-}
+

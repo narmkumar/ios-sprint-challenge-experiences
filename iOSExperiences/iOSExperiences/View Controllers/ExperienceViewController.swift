@@ -20,12 +20,12 @@ class ExperienceViewController: UIViewController {
     
     private let noirFilter = CIFilter.photoEffectNoir()
     private let sepiaFilter = CIFilter.sepiaTone()
-
+    
     // MARK: - Outlets
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var memoryTextField: UITextField!
     @IBOutlet weak var addImageButton: UIButton!
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,43 +39,47 @@ class ExperienceViewController: UIViewController {
     }
     
     private func updateViews() {
+        let playButtonTitle = isPlaying ? "⏸" : "▶️"
+        playButton.setTitle(playButtonTitle, for: .normal)
         
+        let recordButtonTitle = isRecording ? "⏹" : "🔴"
+        recordButton.setTitle(recordButtonTitle, for: .normal)
     }
     
     // MARK: - Image
-
+    
     @IBAction func addImage(_ sender: UIButton) {
         let authorizationStatus = PHPhotoLibrary.authorizationStatus()
+        
+        switch authorizationStatus {
+        case .authorized:
+            presentImagePickerController()
+        case .notDetermined:
             
-            switch authorizationStatus {
-            case .authorized:
-                presentImagePickerController()
-            case .notDetermined:
+            PHPhotoLibrary.requestAuthorization { (status) in
                 
-                PHPhotoLibrary.requestAuthorization { (status) in
-                    
-                    guard status == .authorized else {
-                        NSLog("User did not authorize access to the photo library")
-                        self.presentInformationalAlertController(title: "Error", message: "In order to access the photo library, you must allow this application access to it.")
-                        return
-                    }
-                    
-                    self.presentImagePickerController()
+                guard status == .authorized else {
+                    NSLog("User did not authorize access to the photo library")
+                    self.presentInformationalAlertController(title: "Error", message: "In order to access the photo library, you must allow this application access to it.")
+                    return
                 }
                 
-            case .denied:
-                self.presentInformationalAlertController(title: "Error", message: "In order to access the photo library, you must allow this application access to it.")
-            case .restricted:
-                self.presentInformationalAlertController(title: "Error", message: "Unable to access the photo library. Your device's restrictions do not allow access.")
-                
-            @unknown default:
-                NSLog("Problem occuring")
+                self.presentImagePickerController()
             }
-            presentImagePickerController()
+            
+        case .denied:
+            self.presentInformationalAlertController(title: "Error", message: "In order to access the photo library, you must allow this application access to it.")
+        case .restricted:
+            self.presentInformationalAlertController(title: "Error", message: "Unable to access the photo library. Your device's restrictions do not allow access.")
+            
+        @unknown default:
+            NSLog("Problem occuring")
         }
+        presentImagePickerController()
+    }
     
     @IBAction func addFilter(_ sender: UIButton) {
-    
+        displayFilterAction()
     }
     
     private func displayFilterAction() {
@@ -85,31 +89,31 @@ class ExperienceViewController: UIViewController {
             self.updateImage()
         }
         
-//        let noir = UIAlertAction(title: "Noir", style: .default) { (_) in
-//            self.updateImage()
-//        }
+        //        let noir = UIAlertAction(title: "Noir", style: .default) { (_) in
+        //            self.updateImage()
+        //        }
         
         alert.addAction(sepia)
-    }
+        self.present(alert, animated: true, completion: nil)
 
-        func updateImage() {
-            if let originalImage = originalImage {
-                let filteredImage = filterImage(originalImage)
-                imageView.image = filteredImage
-            } else {
-                imageView.image = nil
-            }
+    }
+    
+    func updateImage() {
+        if let originalImage = originalImage {
+            let filteredImage = filterImage(originalImage)
+            imageView.image = filteredImage
+        } else {
+            imageView.image = nil
         }
-        
+    }
+    
     func filterImage(_ image: UIImage) -> UIImage {
         guard let cgImage = image.cgImage else { return image }
         
         var ciImage = CIImage(cgImage: cgImage)
         
-        var aFilter = CIFilter()
-        
-        aFilter = sepiaFilter
-        
+        let aFilter = sepiaFilter
+            
         aFilter.setValue(ciImage, forKey: kCIInputImageKey)
         if let outputCIImage = aFilter.outputImage {
             ciImage = outputCIImage
@@ -125,20 +129,20 @@ class ExperienceViewController: UIViewController {
     
     
     private func presentImagePickerController() {
-            
-            guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
-                presentInformationalAlertController(title: "Error", message: "The photo library is unavailable")
-                return
-            }
-            
-            let imagePicker = UIImagePickerController()
-            
-            imagePicker.delegate = self
-            
-            imagePicker.sourceType = .photoLibrary
-            
-            present(imagePicker, animated: true, completion: nil)
+        
+        guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
+            presentInformationalAlertController(title: "Error", message: "The photo library is unavailable")
+            return
         }
+        
+        let imagePicker = UIImagePickerController()
+        
+        imagePicker.delegate = self
+        
+        imagePicker.sourceType = .photoLibrary
+        
+        present(imagePicker, animated: true, completion: nil)
+    }
     
     func presentInformationalAlertController(title: String?, message: String?, dismissActionCompletion: ((UIAlertAction) -> Void)? = nil, completion: (() -> Void)? = nil) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -153,22 +157,39 @@ class ExperienceViewController: UIViewController {
     
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
-    
-    var audioPlayer: AVAudioPlayer?
     var audioRecorder: AVAudioRecorder?
+    var audioPlayer: AVAudioPlayer?
     var isPlaying: Bool {
         audioPlayer?.isPlaying ?? false
     }
+    var recordURL: URL?
     var isRecording: Bool {
         audioRecorder?.isRecording ?? false
     }
-    var recordURL: URL?
     
     @IBAction func playButtonPressed(_ sender: UIButton) {
         playPause()
     }
     @IBAction func recordButtonPressed(_ sender: UIButton) {
         recordToggle()
+    }
+    
+    func play() {
+        audioPlayer?.play()
+        updateViews()
+    }
+    
+    func pause() {
+        audioPlayer?.pause()
+        updateViews()
+    }
+    
+    func playPause() {
+        if isPlaying {
+            pause()
+        } else {
+            play()
+        }
     }
     
     func record() {
@@ -207,68 +228,49 @@ class ExperienceViewController: UIViewController {
         }
     }
     
-    func play() {
-        audioPlayer?.play()
-        updateViews()
-    }
-    
-    func pause() {
-        audioPlayer?.pause()
-        updateViews()
-    }
-    
-    func playPause() {
-        if isPlaying {
-            pause()
-        } else {
-            play()
-        }
-    }
-
-    
     // MARK: - Video
     
     @IBAction func addVideo(_ sender: UIButton) {
         requestPermissionAndShowCamera()
     }
     
-        private func requestPermissionAndShowCamera() {
-            let status = AVCaptureDevice.authorizationStatus(for: .video)
-             
-            switch status {
-                
-            case .notDetermined:
-                // First time user - they haven't seen teh dialog to give permission
-                requestPermission()
-            case .restricted:
-                // Parental controls disabled the camera
-                fatalError("Video is dsaled for the user (parental controls)")
-                // TODO: Add UI to inform the user (talk to parents)
-            case .denied:
-                //User did not give us access (maybe it was an accident)
-                fatalError("Tell the user they need to enabe Privacy for videos")
-            case .authorized:
-                // we asked for permission (2nd time they've used the app)
-                showCamera()
-            @unknown default:
-                fatalError("A new status was added that we need to handle")
+    private func requestPermissionAndShowCamera() {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        
+        switch status {
+            
+        case .notDetermined:
+            // First time user - they haven't seen teh dialog to give permission
+            requestPermission()
+        case .restricted:
+            // Parental controls disabled the camera
+            fatalError("Video is dsaled for the user (parental controls)")
+        // TODO: Add UI to inform the user (talk to parents)
+        case .denied:
+            //User did not give us access (maybe it was an accident)
+            fatalError("Tell the user they need to enabe Privacy for videos")
+        case .authorized:
+            // we asked for permission (2nd time they've used the app)
+            showCamera()
+        @unknown default:
+            fatalError("A new status was added that we need to handle")
+        }
+    }
+    
+    private func requestPermission() {
+        AVCaptureDevice.requestAccess(for: .video) { (granted) in
+            guard granted else {
+                fatalError("Tell user they need to enable Privacy for Video")
+            }
+            DispatchQueue.main.async { [weak self] in
+                self?.showCamera()
             }
         }
-        
-        private func requestPermission() {
-            AVCaptureDevice.requestAccess(for: .video) { (granted) in
-                guard granted else {
-                    fatalError("Tell user they need to enable Privacy for Video")
-                }
-                DispatchQueue.main.async { [weak self] in
-                    self?.showCamera()
-                }
-            }
-        }
-        
-        private func showCamera() {
-            performSegue(withIdentifier: "AddVideoSegue", sender: self)
-        }
+    }
+    
+    private func showCamera() {
+        performSegue(withIdentifier: "AddVideoSegue", sender: self)
+    }
 }
 
 // MARK: - Extensions
@@ -285,7 +287,7 @@ extension ExperienceViewController: UIImagePickerControllerDelegate, UINavigatio
         imageView.image = image
         originalImage = image
         
-        }
+    }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
@@ -311,7 +313,7 @@ extension ExperienceViewController: AVAudioRecorderDelegate {
         }
     }
     
-    func ExperienceViewController(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         
         // TODO: Create player with new file URL
         
