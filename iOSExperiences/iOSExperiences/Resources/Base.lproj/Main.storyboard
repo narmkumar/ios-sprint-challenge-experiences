@@ -7,10 +7,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Your Experiences-->
+        <!--Mapped Experiences-->
         <scene sceneID="1D9-e6-aYK">
             <objects>
-                <viewController id="UI2-J6-RoU" sceneMemberID="viewController">
+                <viewController id="UI2-J6-RoU" customClass="MapViewController" customModule="iOSExperiences" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="e91-4z-t4F">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -23,7 +23,8 @@
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" backgroundImage="pencil.and.outline" catalog="system"/>
                                 <connections>
-                                    <segue destination="gUx-Zj-ZC3" kind="show" id="AwL-6U-6Vk"/>
+                                    <action selector="createExperience:" destination="UI2-J6-RoU" eventType="touchUpInside" id="Ycw-C4-hoY"/>
+                                    <segue destination="gUx-Zj-ZC3" kind="show" id="6kr-7D-qrb"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -40,7 +41,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="qgl-jG-Bcw"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Your Experiences" id="0Da-UR-4dY"/>
+                    <navigationItem key="navigationItem" title="Mapped Experiences" id="0Da-UR-4dY"/>
+                    <connections>
+                        <outlet property="mapView" destination="sQe-PR-hoH" id="OVy-Tc-C7n"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dto-E4-go2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -49,21 +53,28 @@
         <!--Create an Experience-->
         <scene sceneID="WyU-9m-hwz">
             <objects>
-                <viewController id="gUx-Zj-ZC3" sceneMemberID="viewController">
+                <viewController id="gUx-Zj-ZC3" customClass="ExperienceViewController" customModule="iOSExperiences" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="f4v-47-I5I">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FEj-x4-cUj">
                                 <rect key="frame" x="0.0" y="140" width="414" height="299"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wwz-n7-0SJ">
                                 <rect key="frame" x="160" y="389" width="94" height="30"/>
                                 <state key="normal" title="Add an Image"/>
+                                <connections>
+                                    <action selector="addImage:" destination="gUx-Zj-ZC3" eventType="touchUpInside" id="zTb-uO-E74"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cBG-fg-1ll">
                                 <rect key="frame" x="168" y="526.5" width="78" height="30"/>
                                 <state key="normal" title="Add a Filter"/>
+                                <connections>
+                                    <action selector="addFilter:" destination="gUx-Zj-ZC3" eventType="touchUpInside" id="qJW-Qy-39g"/>
+                                </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="9wB-N6-73B">
                                 <rect key="frame" x="20" y="449" width="374" height="62.5"/>
@@ -99,10 +110,16 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="syn-tB-VuX">
                                                         <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                         <state key="normal" title="🔴"/>
+                                                        <connections>
+                                                            <action selector="recordButtonPressed:" destination="gUx-Zj-ZC3" eventType="touchUpInside" id="jqN-Et-0h6"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cNM-Xj-1sf">
                                                         <rect key="frame" x="83" y="0.0" width="30" height="30"/>
                                                         <state key="normal" title="▶️"/>
+                                                        <connections>
+                                                            <action selector="playButtonPressed:" destination="gUx-Zj-ZC3" eventType="touchUpInside" id="lak-6H-BbZ"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -121,6 +138,7 @@
                                                 <rect key="frame" x="118" y="28.5" width="30" height="30"/>
                                                 <state key="normal" title="🎥"/>
                                                 <connections>
+                                                    <action selector="addVideo:" destination="gUx-Zj-ZC3" eventType="touchUpInside" id="LIC-4m-3zu"/>
                                                     <segue destination="qdJ-HP-xjz" kind="show" identifier="AddVideoSegue" id="hjH-ZW-u8q"/>
                                                 </connections>
                                             </button>
@@ -151,30 +169,44 @@
                         <viewLayoutGuide key="safeArea" id="CQC-w7-jJ4"/>
                     </view>
                     <navigationItem key="navigationItem" title="Create an Experience" id="2vF-ZD-oE8">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="27d-kz-eTD"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="27d-kz-eTD">
+                            <connections>
+                                <action selector="saveButtonTapped:" destination="gUx-Zj-ZC3" id="VO0-De-J8i"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="addImageButton" destination="wwz-n7-0SJ" id="Rgz-de-oha"/>
+                        <outlet property="imageView" destination="FEj-x4-cUj" id="Rph-gh-5ua"/>
+                        <outlet property="memoryTextField" destination="F4e-h9-JjC" id="M67-pn-bW7"/>
+                        <outlet property="playButton" destination="cNM-Xj-1sf" id="J8s-jc-JGr"/>
+                        <outlet property="recordButton" destination="syn-tB-VuX" id="Qi2-kd-qOI"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F9h-lH-kl6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1798.5507246376812" y="51.5625"/>
         </scene>
-        <!--View Controller-->
+        <!--Camera View Controller-->
         <scene sceneID="QqS-H2-71m">
             <objects>
-                <viewController id="qdJ-HP-xjz" sceneMemberID="viewController">
+                <viewController id="qdJ-HP-xjz" customClass="CameraViewController" customModule="iOSExperiences" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="p6u-Op-ekF">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GPi-pn-54G">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GPi-pn-54G" customClass="CameraPreviewView" customModule="iOSExperiences" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="140" width="414" height="722"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AAi-Fn-5ig">
-                                        <rect key="frame" x="173" y="636" width="68" height="36"/>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AAi-Fn-5ig">
+                                        <rect key="frame" x="173" y="635" width="68" height="36"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <state key="normal" title="Record">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="videoRecordTapped:" destination="qdJ-HP-xjz" eventType="touchUpInside" id="vEG-tD-h4k"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -195,8 +227,16 @@
                         <viewLayoutGuide key="safeArea" id="5ek-ud-NDj"/>
                     </view>
                     <navigationItem key="navigationItem" id="lVy-VC-4Hg">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="bJT-gV-Bpr"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="bJT-gV-Bpr">
+                            <connections>
+                                <action selector="saveButtonTapped:" destination="qdJ-HP-xjz" id="CZV-DA-8FW"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="cameraView" destination="GPi-pn-54G" id="0MP-d6-ssy"/>
+                        <outlet property="recordButton" destination="AAi-Fn-5ig" id="6a6-wL-UDd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s6a-uv-u9s" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
